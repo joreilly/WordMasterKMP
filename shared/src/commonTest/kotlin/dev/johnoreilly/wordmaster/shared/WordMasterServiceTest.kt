@@ -20,10 +20,13 @@ class WordMasterServiceTest {
 
         checkGuess(guess = "PERMS", answer = "PRIME", arrayListOf(CORRECT_POSITION, INCORRECT_POSITION,
             INCORRECT_POSITION, CORRECT_POSITION, NOT_IN_WORD))
+
+        checkGuess(guess = "PEEPS", answer = "PRIME", arrayListOf(CORRECT_POSITION, INCORRECT_POSITION,
+            NOT_IN_WORD, NOT_IN_WORD, NOT_IN_WORD))
     }
 
     private fun checkGuess(guess: String, answer: String, expectedResult: ArrayList<LetterStatus>) {
-        wordMasterService.currentGuessAttempt = 0
+        wordMasterService.currentGuessAttempt = guessAttempt
         wordMasterService.answer = answer
         submitGuess(guess)
 
