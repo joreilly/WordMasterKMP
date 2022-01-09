@@ -19,17 +19,12 @@ kotlin {
                     isForce = true
                 }
 
-                with(Koin) {
-                    api(core)
-                }
-
-                api("com.squareup.okio:okio:3.0.0")
+                implementation(Square.okio)
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(Koin.test)
                 implementation(Kotlinx.coroutinesTest)
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))

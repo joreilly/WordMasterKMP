@@ -15,8 +15,8 @@ enum class LetterStatus {
 
 class WordMasterService(wordsFilePath: String) {
     private val validWords = mutableListOf<String>()
-    private var answer = ""
 
+    var answer = ""
     var currentGuessAttempt = 0
     val boardGuesses = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
     val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())

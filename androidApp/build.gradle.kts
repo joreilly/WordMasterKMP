@@ -63,12 +63,6 @@ dependencies {
         implementation(navigation)
     }
 
-    with (Koin) {
-        implementation(core)
-        implementation(android)
-        implementation(compose)
-    }
-
     with(Test) {
         testImplementation(junit)
         androidTestImplementation(composeUiTest)
