@@ -7,7 +7,7 @@ and also [Word Master](https://github.com/octokatherine/word-master) web sample.
 - Desktop (Compose for Desktop)
 
 
-### Remaing work includes
+### Remaining work includes
 
 - fix color status shown when more than 1 of same character
 - check if overall word is valid and show indication in UI if not
