@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
@@ -13,6 +14,9 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +34,7 @@ fun main() = singleWindowApplication(
     WordMasterView()
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun WordMasterView() {
     val wordMasterService = remember { WordMasterService("words.txt") }
@@ -42,7 +47,14 @@ fun WordMasterView() {
 
     Row(Modifier.fillMaxSize().padding(16.dp)) {
 
-        Column {
+        Column(Modifier.onKeyEvent {
+            if (it.key == Key.Enter) {
+                wordMasterService.checkGuess()
+                true
+            } else {
+                false
+            }
+        }) {
             for (guessAttempt in 0 until WordMasterService.MAX_NUMBER_OF_GUESSES) {
                 Row(horizontalArrangement = Arrangement.SpaceBetween) {
 
