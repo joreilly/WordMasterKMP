@@ -19,22 +19,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.*
 import dev.johnoreilly.wordmaster.shared.WordMasterService
 import dev.johnoreilly.wordmaster.shared.LetterStatus
 
-fun main() = application {
-    val windowState = rememberWindowState(size = DpSize(350.dp, 500.dp))
-
-    Window(
-        onCloseRequest = ::exitApplication,
-        state = windowState,
-        title = "Word Master KMP"
-    ) {
-        WordMasterView()
-    }
+fun main() = singleWindowApplication(
+    title = "WordMaster KMP",
+    state = WindowState(size = DpSize(320.dp, 500.dp))
+) {
+    WordMasterView()
 }
 
 @Composable
@@ -50,10 +43,10 @@ fun WordMasterView() {
     Row(Modifier.fillMaxSize().padding(16.dp)) {
 
         Column {
-            for (guessAttempt in 0..WordMasterService.MAX_NUMBER_OF_GUESSES-1) {
+            for (guessAttempt in 0 until WordMasterService.MAX_NUMBER_OF_GUESSES) {
                 Row(horizontalArrangement = Arrangement.SpaceBetween) {
 
-                    for (character in 0..WordMasterService.NUMBER_LETTERS-1) {
+                    for (character in 0 until WordMasterService.NUMBER_LETTERS) {
                         Column(
                             Modifier.padding(4.dp).background(White).border(1.dp, Black),
                             horizontalAlignment = Alignment.CenterHorizontally
