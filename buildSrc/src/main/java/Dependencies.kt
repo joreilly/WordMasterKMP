@@ -1,14 +1,13 @@
 
 object Versions {
     const val kotlinVersion = "1.6.10"
-    const val apollo = "3.0.0"
-    const val koin = "3.1.4"
     const val kotlinCoroutines = "1.6.0"
 
     const val compose = "1.1.0-rc01"
     const val composeCompiler = "1.1.0-rc02"
     const val navCompose = "2.4.0-rc01"
     const val accompanist = "0.21.0-beta"
+    const val okio = "3.0.0"
 
     const val wearCompose = "1.0.0-alpha13"
     const val composeDesktopWeb = "1.0.1"
@@ -51,14 +50,6 @@ object Google {
     }
 }
 
-
-object Koin {
-    val core = "io.insert-koin:koin-core:${Versions.koin}"
-    val test = "io.insert-koin:koin-test:${Versions.koin}"
-    val android = "io.insert-koin:koin-android:${Versions.koin}"
-    val compose = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
-}
-
 object Test {
     const val junit = "junit:junit:${Versions.junit}"
     const val composeUiTest = "androidx.compose.ui:ui-test:${Versions.compose}"
@@ -69,6 +60,10 @@ object Test {
 object Kotlinx {
     const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}"
     const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinCoroutines}"
+}
+
+object Square {
+    const val okio = "com.squareup.okio:okio:${Versions.okio}"
 }
 
 
