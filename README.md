@@ -1,7 +1,7 @@
 # WordMasterKMP
 
-WIP Kotlin Multiplatform sample inspired by [Wordle](https://www.powerlanguage.co.uk/wordle/)
-and also [Word Master](https://github.com/octokatherine/word-master) web sample.  The main game logic/state is inlcuded in shared KMP code with basic UI then in following clients
+WIP Kotlin Multiplatform sample heavily inspired by [Wordle](https://www.powerlanguage.co.uk/wordle/)
+and also [Word Master](https://github.com/octokatherine/word-master) web sample.  The main game logic/state is included in shared KMP code with basic UI then in following clients
 - iOS (SwiftUI)
 - Android (Jetpack Compose)
 - Desktop (Compose for Desktop)
@@ -11,6 +11,7 @@ and also [Word Master](https://github.com/octokatherine/word-master) web sample.
 
 - fix color status shown when more than 1 of same character
 - check if overall word is valid and show indication in UI if not
+- hitting enter on desktop client should submit guess
 - share Compose code between Android and Desktop
 
 
