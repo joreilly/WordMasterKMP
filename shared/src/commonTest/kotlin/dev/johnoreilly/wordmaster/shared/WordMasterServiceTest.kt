@@ -3,27 +3,39 @@ package dev.johnoreilly.wordmaster.shared
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
+import dev.johnoreilly.wordmaster.shared.LetterStatus.*
+import kotlin.test.assertEquals
+
 class WordMasterServiceTest {
-    // TODO provide hooks for test to provide data source for list of valid words
     private val wordMasterService = WordMasterService("../words.txt")
+    private val guessAttempt = 0
 
     @Test
-    fun testGuessCheck() {
-        val guessAttempt = 0
+    fun testWordMasterService() {
+        checkGuess(guess = "PRIME", answer = "PRIME", arrayListOf(CORRECT_POSITION, CORRECT_POSITION,
+            CORRECT_POSITION, CORRECT_POSITION, CORRECT_POSITION))
 
-        // check initial values of board status values
-        var letterStatusList = wordMasterService.boardStatus.value[guessAttempt]
-        assertTrue(letterStatusList.all { it == LetterStatus.UNGUESSED })
+        checkGuess(guess = "PERMS", answer = "PRIME", arrayListOf(CORRECT_POSITION, INCORRECT_POSITION,
+            INCORRECT_POSITION, CORRECT_POSITION, NOT_IN_WORD))
+
+        checkGuess(guess = "PERMS", answer = "PRIME", arrayListOf(CORRECT_POSITION, INCORRECT_POSITION,
+            INCORRECT_POSITION, CORRECT_POSITION, NOT_IN_WORD))
+    }
+
+    private fun checkGuess(guess: String, answer: String, expectedResult: ArrayList<LetterStatus>) {
+        wordMasterService.currentGuessAttempt = 0
+        wordMasterService.answer = answer
+        submitGuess(guess)
+
+        val letterStatusList = wordMasterService.boardStatus.value[guessAttempt]
+        assertEquals(expectedResult, letterStatusList)
+    }
 
 
-        // initial test for guessing fully correct answer
-        val guess = wordMasterService.answer
+    private fun submitGuess(guess: String) {
         guess.forEachIndexed { index, char ->
             wordMasterService.setGuess(guessAttempt, index, char.toString())
         }
         wordMasterService.checkGuess()
-
-        letterStatusList = wordMasterService.boardStatus.value[guessAttempt]
-        assertTrue(letterStatusList.all { it == LetterStatus.CORRECT_POSITION })
     }
 }

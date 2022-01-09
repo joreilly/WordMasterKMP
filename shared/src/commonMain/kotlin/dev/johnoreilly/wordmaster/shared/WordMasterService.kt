@@ -4,12 +4,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
-import okio.buffer
-import okio.use
+import dev.johnoreilly.wordmaster.shared.LetterStatus.*
 
 
 enum class LetterStatus {
-    UNGUESSED, CORRECT_POSITION, WRONG_POSITION, NOT_IN_WORD
+    UNGUESSED, CORRECT_POSITION, INCORRECT_POSITION, NOT_IN_WORD
 }
 
 
@@ -41,7 +40,7 @@ class WordMasterService(wordsFilePath: String) {
             val statusList = arrayListOf<LetterStatus>()
             val guesses = arrayListOf<String>()
             for (character in 0 until NUMBER_LETTERS) {
-                statusList.add(LetterStatus.UNGUESSED)
+                statusList.add(UNGUESSED)
                 guesses.add("")
             }
             newBoardStatus.add(statusList)
@@ -86,19 +85,31 @@ class WordMasterService(wordsFilePath: String) {
         }
     }
 
-    private fun checkWord(word: String): ArrayList<LetterStatus> {
-        val letterStatusList = arrayListOf<LetterStatus>()
+    private fun checkWord(guess: String): ArrayList<LetterStatus> {
+        val letterStatusList = arrayListOf(NOT_IN_WORD, NOT_IN_WORD, NOT_IN_WORD, NOT_IN_WORD, NOT_IN_WORD)
 
-        word.forEachIndexed { index, char ->
-            val status = if (answer[index] == char) {
-                LetterStatus.CORRECT_POSITION
-            } else if (answer.contains(char)) {
-                LetterStatus.WRONG_POSITION
-            } else {
-                LetterStatus.NOT_IN_WORD
+        val unusedAnswerLetters = answer.toMutableList()
+
+        // check correct positions
+        for (index in 0 until NUMBER_LETTERS) {
+            val letter = guess[index]
+            if (letter == answer[index]) {
+                letterStatusList[index] = CORRECT_POSITION
+                unusedAnswerLetters.remove(letter)
             }
-            letterStatusList.add(status)
         }
+
+        // check letters in incorrect position
+        for (index in 0 until NUMBER_LETTERS) {
+            if (letterStatusList[index] == CORRECT_POSITION) continue
+
+            val letter = guess[index]
+            if (letter in unusedAnswerLetters) {
+                letterStatusList[index] = INCORRECT_POSITION
+                unusedAnswerLetters.remove(letter)
+            }
+        }
+
         return letterStatusList
     }
 

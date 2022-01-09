@@ -139,7 +139,7 @@ fun mapLetterStatusToBackgroundColor(letterStatus: LetterStatus): Color {
     return when (letterStatus) {
         LetterStatus.UNGUESSED -> Color.White
         LetterStatus.CORRECT_POSITION -> Color(0xFF008000)
-        LetterStatus.WRONG_POSITION -> Color(0xFF9B870C)
+        LetterStatus.INCORRECT_POSITION -> Color(0xFF9B870C)
         LetterStatus.NOT_IN_WORD -> Color.Gray
     }
 }
@@ -148,7 +148,7 @@ fun mapLetterStatusToTextColor(letterStatus: LetterStatus): Color {
     return when (letterStatus) {
         LetterStatus.UNGUESSED -> Color.Black
         LetterStatus.CORRECT_POSITION -> Color.White
-        LetterStatus.WRONG_POSITION -> Color.White
+        LetterStatus.INCORRECT_POSITION -> Color.White
         LetterStatus.NOT_IN_WORD -> Color.White
     }
 }
