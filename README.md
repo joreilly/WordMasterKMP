@@ -12,8 +12,6 @@ and also [Word Master](https://github.com/octokatherine/word-master) web sample.
 - fix color status shown when more than 1 of same character
 - check if overall word is valid and show indication in UI if not
 - share Compose code between Android and Desktop
-- move focus between fields as you type
-- only allow entry in row for current guess attempt
 
 
 ### Screenshots

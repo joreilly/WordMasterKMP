@@ -5,11 +5,15 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
@@ -40,29 +44,40 @@ fun WordMasterView() {
     val boardGuesses by wordMasterService.boardGuesses.collectAsState()
     val boardStatus by wordMasterService.boardStatus.collectAsState()
 
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     Row(Modifier.fillMaxSize().padding(16.dp)) {
 
         Column {
             for (guessAttempt in 0..WordMasterService.MAX_NUMBER_OF_GUESSES-1) {
                 Row(horizontalArrangement = Arrangement.SpaceBetween) {
+
                     for (character in 0..WordMasterService.NUMBER_LETTERS-1) {
                         Column(
                             Modifier.padding(4.dp).background(White).border(1.dp, Black),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+
+                            val modifier = if (guessAttempt == 0 && character == 0) {
+                                Modifier.width(50.dp).focusRequester(focusRequester)
+                            } else {
+                                Modifier.width(50.dp)
+                            }
+
                             TextField(
                                 value = boardGuesses[guessAttempt][character],
                                 onValueChange = {
-                                    if (it.length == 1) {
+                                    if (it.length <= 1 && guessAttempt == wordMasterService.currentGuessAttempt) {
                                         wordMasterService.setGuess(
                                             guessAttempt,
                                             character,
                                             it.uppercase()
                                         )
+                                        focusManager.moveFocus(FocusDirection.Next)
                                     }
                                 },
-                                modifier = Modifier.width(50.dp),
+                                modifier = modifier,
                                 textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center),
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
@@ -71,8 +86,12 @@ fun WordMasterView() {
                                     focusedIndicatorColor = Transparent
                                 )
                             )
-                        }
 
+                            DisposableEffect(Unit) {
+                                focusRequester.requestFocus()
+                                onDispose { }
+                            }
+                        }
                     }
                 }
             }

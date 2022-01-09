@@ -87,21 +87,19 @@ class WordMasterService(wordsFilePath: String) {
     }
 
     private fun checkWord(word: String): ArrayList<LetterStatus> {
-        val letterStatuses = arrayListOf<LetterStatus>()
+        val letterStatusList = arrayListOf<LetterStatus>()
 
         word.forEachIndexed { index, char ->
             val status = if (answer[index] == char) {
                 LetterStatus.CORRECT_POSITION
-            } else if (answer.contains(char))  {// && !answer.substring(0, index).contains(char)) {
+            } else if (answer.contains(char)) {
                 LetterStatus.WRONG_POSITION
             } else {
                 LetterStatus.NOT_IN_WORD
             }
-            letterStatuses.add(status)
+            letterStatusList.add(status)
         }
-        println(letterStatuses)
-
-        return letterStatuses
+        return letterStatusList
     }
 
 
