@@ -14,7 +14,7 @@ val boardGuesses = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
 val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
 ```
 
-The various clients call `WordService.setGuess()` when a user enters a letter and then drive UI by observing those.  The Compose clients for example do that using
+The various clients call `WordService.setGuess()` when a user enters a letter and UI reflects any resulting updates to above `StateFlow`'s.  The Compose clients for example do that using
 
 ```
 val boardGuesses by wordMasterService.boardGuesses.collectAsState()
