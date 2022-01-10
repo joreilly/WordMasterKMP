@@ -13,8 +13,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-    - name: Build with Gradle
+    - name: Build Android client
       run: ./gradlew assembleDebug
+    - name: Build Compose Desktop client
+      run: ./gradlew :compose-desktop:assemble
     - name: Build iOS shared code
       run: ./gradlew :shared:compileKotlinIosArm64
     - name: Tests
