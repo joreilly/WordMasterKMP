@@ -80,10 +80,9 @@ fun WordMasterView() {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
-                            val modifier = if (guessAttempt == 0 && character == 0) {
-                                Modifier.width(50.dp).focusRequester(focusRequester)
-                            } else {
-                                Modifier.width(50.dp)
+                            var modifier = Modifier.width(55.dp).height(55.dp)
+                            if (guessAttempt == 0 && character == 0) {
+                                modifier = modifier.focusRequester(focusRequester)
                             }
 
                             TextField(
@@ -99,7 +98,7 @@ fun WordMasterView() {
                                     }
                                 },
                                 modifier = modifier,
-                                textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center),
+                                textStyle = TextStyle(fontSize = 14.sp, textAlign = TextAlign.Center),
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
                                     backgroundColor = mapLetterStatusToBackgroundColor(boardStatus[guessAttempt][character]),

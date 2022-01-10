@@ -59,7 +59,7 @@ class ViewModel: ObservableObject {
                     color = .green
                 case .notInWord:
                     color = .gray
-                case .wrongPosition:
+                case .incorrectPosition:
                     color = .yellow
                 default:
                     color = .white
