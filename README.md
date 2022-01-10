@@ -5,6 +5,46 @@ Kotlin Multiplatform sample heavily inspired by [Wordle](https://www.powerlangua
 - Android (Jetpack Compose)
 - Desktop (Compose for Desktop)
 
+### Shared KMP game logic/state
+
+The shared `WordMasterService` class includes following `StateFlow`s representing the current set of guesses and updated status info for each letter.
+
+```
+val boardGuesses = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
+val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
+```
+
+The various clients call `WordService.setGuess()` and then drive UI by observing these.  The Compose clients for example do that using
+
+```
+val boardGuesses by wordMasterService.boardGuesses.collectAsState()
+val boardStatus by wordMasterService.boardStatus.collectAsState()
+```
+
+On iOS we're using [KMP-NativeCourtines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow`s to `AsyncStream`s.  So, for example, our view model includes
+
+```
+@Published public var boardStatus: [[LetterStatus]] = []
+@Published public var boardGuesses: [[String]] = []
+```
+
+which are then updated using for example
+
+```
+let stream = asyncStream(for: wordMasterService.boardStatusNative)
+for try await data in stream {
+  self.boardStatus = data as! [[LetterStatus]]
+}
+
+let stream = asyncStream(for: wordMasterService.boardGuessesNative)
+for try await data in stream {
+    self.boardGuesses = data as! [[String]]
+}
+
+```
+
+Any updates to `boardStatus` or `boardGuesses` will trigger our SwiftUI UI to be recomposed again.
+
 
 ### Remaining work includes
 
