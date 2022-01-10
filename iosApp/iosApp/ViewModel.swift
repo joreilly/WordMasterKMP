@@ -53,8 +53,6 @@ class ViewModel: ObservableObject {
     }
 
     func getGuess(guessAttempt: Int, character: Int) -> String {
-        //return wordMasterService.getGuess(guessAttempt: Int32(guessAttempt), character: Int32(character))
-        
         if (!boardGuesses.isEmpty) {
             return boardGuesses[guessAttempt][character]
         } else {
@@ -62,10 +60,6 @@ class ViewModel: ObservableObject {
         }
     }
 
-    func getLetterStatus(guessAttempt: Int, character: Int) -> LetterStatus {
-        return wordMasterService.getLetterStatus(guessAttempt: Int32(guessAttempt), character: Int32(character))
-    }
-    
     func getLetterStatusBackgroundColor(guessAttempt: Int, character: Int) -> Color {
         if (boardStatus.count > 0) {
             let status = boardStatus[guessAttempt][character]

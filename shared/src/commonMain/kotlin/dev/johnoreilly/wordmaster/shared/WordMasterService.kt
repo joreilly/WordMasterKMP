@@ -64,14 +64,6 @@ class WordMasterService(wordsFilePath: String) {
         boardGuesses.value = newBoardGuesses
     }
 
-    fun getGuess(guessAttempt: Int, character: Int): String {
-        return boardGuesses.value[guessAttempt][character]
-    }
-
-    fun getLetterStatus(guessAttempt: Int, character: Int): LetterStatus {
-        return boardStatus.value[guessAttempt][character]
-    }
-
     fun checkGuess() {
         val currentGuess = boardGuesses.value[currentGuessAttempt].joinToString("")
         if (currentGuess.length == NUMBER_LETTERS) {
