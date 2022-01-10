@@ -8,6 +8,7 @@ import KMPNativeCoroutinesAsync
 class ViewModel: ObservableObject {
     private let wordMasterService: WordMasterService
     @Published public var boardStatus: [[LetterStatus]] = []
+    @Published public var boardGuesses: [[String]] = []
     
     init() {
         let wordsPath = Bundle.main.path(forResource: "words", ofType: "txt") ?? ""
@@ -23,6 +24,18 @@ class ViewModel: ObservableObject {
             } catch {
                 print("Failed with error: \(error)")
             }
+        }
+        Task {
+            do {
+                let stream = asyncStream(for: wordMasterService.boardGuessesNative)
+                for try await data in stream {
+                    self.boardGuesses = data as! [[String]]
+                    print(boardGuesses)
+                }
+            } catch {
+                print("Failed with error: \(error)")
+            }
+
         }
     }
 
@@ -40,7 +53,13 @@ class ViewModel: ObservableObject {
     }
 
     func getGuess(guessAttempt: Int, character: Int) -> String {
-        return wordMasterService.getGuess(guessAttempt: Int32(guessAttempt), character: Int32(character))
+        //return wordMasterService.getGuess(guessAttempt: Int32(guessAttempt), character: Int32(character))
+        
+        if (!boardGuesses.isEmpty) {
+            return boardGuesses[guessAttempt][character]
+        } else {
+            return ""
+        }
     }
 
     func getLetterStatus(guessAttempt: Int, character: Int) -> LetterStatus {
