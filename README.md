@@ -14,14 +14,14 @@ val boardGuesses = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
 val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
 ```
 
-The various clients call `WordService.setGuess()` and then drive UI by observing these.  The Compose clients for example do that using
+The various clients call `WordService.setGuess()` when a user enters a letter and then drive UI by observing those.  The Compose clients for example do that using
 
 ```
 val boardGuesses by wordMasterService.boardGuesses.collectAsState()
 val boardStatus by wordMasterService.boardStatus.collectAsState()
 ```
 
-On iOS we're using [KMP-NativeCourtines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow`s to `AsyncStream`s.  So, for example, our view model includes
+On iOS we're using [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow`s to Swift `AsyncStream`s.  So, for example, our Swift view model includes
 
 ```
 @Published public var boardStatus: [[LetterStatus]] = []
