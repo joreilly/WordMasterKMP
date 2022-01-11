@@ -15,13 +15,13 @@ val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayList
 ```
 
 The various clients call `WordService.setGuess()` when a user enters a letter and then `WordService.checkGuess()` after row of letters
-are entered...UI then reflects any resulting updates to above `StateFlow`'s.  The Compose clients for example do that using
+are entered...UI then reflects any resulting updates to above `StateFlow`'s.  The Compose clients for example do that using following (with any updates to those `StateFlow's` triggering recomposition)
 
 ```
 val boardGuesses by wordMasterService.boardGuesses.collectAsState()
 val boardStatus by wordMasterService.boardStatus.collectAsState()
 ```
-
+<br>
 On iOS we're using [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow`s to Swift `AsyncStream`s.  So, for example, our Swift view model includes
 
 ```
