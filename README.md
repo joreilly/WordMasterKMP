@@ -49,7 +49,8 @@ Any updates to `boardStatus` or `boardGuesses` will trigger our SwiftUI UI to be
 
 ### Remaining work includes
 
-- check if overall word is valid and show indication in UI if not
+- check if overall word is valid and show indication in UI if not (ideally with animations!)
+- better keyboard navigation
 - share Compose code between Android and Desktop
 - indicator in UI that correct guess entered (other than all letters being green)
 
