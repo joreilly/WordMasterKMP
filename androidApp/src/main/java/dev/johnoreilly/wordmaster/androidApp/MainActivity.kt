@@ -125,6 +125,7 @@ fun WordMasterView() {
                 Spacer(Modifier.width(16.dp))
                 Button(onClick = {
                     wordMasterService.resetGame()
+                    focusRequester.requestFocus()
                 }) {
                     Text("New Game")
                 }

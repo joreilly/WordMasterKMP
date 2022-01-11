@@ -51,7 +51,10 @@ fun WordMasterView() {
             if (it.key == Key.Enter) {
                 wordMasterService.checkGuess()
                 true
-            } else {
+            } else if (it.key == Key.Backspace) {
+                focusManager.moveFocus(FocusDirection.Previous)
+                true
+            } else  {
                 false
             }
         }) {
@@ -110,6 +113,7 @@ fun WordMasterView() {
                 Spacer(Modifier.width(16.dp))
                 Button(onClick = {
                     wordMasterService.resetGame()
+                    focusRequester.requestFocus()
                 }) {
                     Text("New Game")
                 }
