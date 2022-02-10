@@ -3,10 +3,10 @@ object Versions {
     const val kotlinVersion = "1.6.10"
     const val kotlinCoroutines = "1.6.0"
 
-    const val compose = "1.1.0-rc01"
-    const val composeCompiler = "1.1.0-rc02"
-    const val navCompose = "2.4.0-rc01"
-    const val accompanist = "0.21.0-beta"
+    const val compose = "1.1.0"
+    const val composeCompiler = "1.1.0"
+    const val navCompose = "2.4.1"
+    const val accompanist = "0.23.0"
     const val okio = "3.0.0"
 
     const val wearCompose = "1.0.0-alpha13"
