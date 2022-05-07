@@ -1,18 +1,16 @@
 
 object Versions {
-    const val kotlinVersion = "1.6.10"
-    const val kotlinCoroutines = "1.6.0"
+    const val kotlinVersion = "1.6.20"
+    const val kotlinCoroutines = "1.6.1"
 
-    const val compose = "1.1.0"
-    const val composeCompiler = "1.1.0"
-    const val navCompose = "2.4.1"
+    const val compose = "1.2.0-alpha08"
+    const val composeCompiler = "1.2.0-alpha08"
+    const val composeDesktopWeb = "1.2.0-alpha01-dev679"
+    const val navCompose = "2.4.2"
     const val accompanist = "0.23.0"
     const val okio = "3.0.0"
 
-    const val wearCompose = "1.0.0-alpha13"
-    const val composeDesktopWeb = "1.0.1"
-
-    const val kmpNativeCoroutines = "0.11.1-new-mm"
+    const val kmpNativeCoroutines = "0.12.1-new-mm"
 
     const val junit = "4.13"
 }
@@ -34,10 +32,6 @@ object Compose {
     const val foundationLayout = "androidx.compose.foundation:foundation-layout:${Versions.compose}"
     const val material = "androidx.compose.material:material:${Versions.compose}"
     const val navigation = "androidx.navigation:navigation-compose:${Versions.navCompose}"
-
-    const val wearFoundation = "androidx.wear.compose:compose-foundation:${Versions.wearCompose}"
-    const val wearMaterial = "androidx.wear.compose:compose-material:${Versions.wearCompose}"
-    const val wearNavigation = "androidx.wear.compose:compose-navigation:${Versions.wearCompose}"
 
     const val activityCompose = "androidx.activity:activity-compose:1.4.0"
 }
