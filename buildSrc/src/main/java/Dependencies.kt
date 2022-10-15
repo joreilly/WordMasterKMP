@@ -1,16 +1,16 @@
 
 object Versions {
-    const val kotlinVersion = "1.7.10"
+    const val kotlinVersion = "1.7.20"
     const val kotlinCoroutines = "1.6.4"
 
-    const val compose = "1.3.0-beta03"
-    const val composeCompiler = "1.3.1"
-    const val composeDesktopWeb = "1.2.0-beta01"
+    const val compose = "1.3.0-rc01"
+    const val composeCompiler = "1.3.2"
+    const val composeDesktopWeb = "1.2.0"
     const val navCompose = "2.5.2"
     const val accompanist = "0.26.2-beta"
     const val okio = "3.0.0"
 
-    const val kmpNativeCoroutines = "0.13.0"
+    const val kmpNativeCoroutines = "0.13.1"
 
     const val junit = "4.13"
 }
@@ -18,7 +18,6 @@ object Versions {
 
 object AndroidSdk {
     const val min = 24
-    const val minWear = 28
     const val compile = 33
     const val target = compile
 }
@@ -32,15 +31,11 @@ object Compose {
     const val foundationLayout = "androidx.compose.foundation:foundation-layout:${Versions.compose}"
     const val material = "androidx.compose.material:material:${Versions.compose}"
     const val navigation = "androidx.navigation:navigation-compose:${Versions.navCompose}"
-
-    const val activityCompose = "androidx.activity:activity-compose:1.4.0"
 }
 
 object Google {
     object Accompanist {
         const val insets = "com.google.accompanist:accompanist-insets:${Versions.accompanist}"
-        const val pager = "com.google.accompanist:accompanist-pager:${Versions.accompanist}"
-        const val pagerIndicator = "com.google.accompanist:accompanist-pager-indicators:${Versions.accompanist}"
     }
 }
 
