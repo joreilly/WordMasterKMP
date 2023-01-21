@@ -1,16 +1,16 @@
 
 object Versions {
-    const val kotlinVersion = "1.7.20"
+    const val kotlinVersion = "1.8.0"
     const val kotlinCoroutines = "1.6.4"
 
-    const val compose = "1.3.0-rc01"
-    const val composeCompiler = "1.3.2"
-    const val composeDesktopWeb = "1.2.0"
+    const val compose = "1.4.0-alpha03"
+    const val composeCompiler = "1.4.0"
+    const val composeDesktopWeb = "1.3.0-rc05"
     const val navCompose = "2.5.2"
     const val accompanist = "0.26.2-beta"
     const val okio = "3.0.0"
 
-    const val kmpNativeCoroutines = "0.13.1"
+    const val kmpNativeCoroutines = "1.0.0-ALPHA-4"
 
     const val junit = "4.13"
 }

@@ -1,10 +1,14 @@
 package dev.johnoreilly.wordmaster.shared
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutineScope
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import kotlinx.coroutines.flow.MutableStateFlow
 import okio.FileSystem
 import okio.Path
 import okio.Path.Companion.toPath
 import dev.johnoreilly.wordmaster.shared.LetterStatus.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 
 
 enum class LetterStatus {
@@ -13,11 +17,18 @@ enum class LetterStatus {
 
 
 class WordMasterService(wordsFilePath: String) {
+    @NativeCoroutineScope
+    val coroutineScope: CoroutineScope = MainScope()
+
     private val validWords = mutableListOf<String>()
 
     var answer = ""
     var currentGuessAttempt = 0
+
+    @NativeCoroutines
     val boardGuesses = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
+
+    @NativeCoroutines
     val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
 
 

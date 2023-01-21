@@ -16,7 +16,7 @@ class ViewModel: ObservableObject {
         
         Task {
             do {
-                let stream = asyncStream(for: wordMasterService.boardStatusNative)
+                let stream = asyncSequence(for: wordMasterService.boardStatus)
                 for try await data in stream {
                     self.boardStatus = data as! [[LetterStatus]]
                     print(boardStatus)
@@ -27,7 +27,7 @@ class ViewModel: ObservableObject {
         }
         Task {
             do {
-                let stream = asyncStream(for: wordMasterService.boardGuessesNative)
+                let stream = asyncSequence(for: wordMasterService.boardGuesses)
                 for try await data in stream {
                     self.boardGuesses = data as! [[String]]
                     print(boardGuesses)
