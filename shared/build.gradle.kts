@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("com.google.devtools.ksp")
     id("com.rickclephas.kmp.nativecoroutines")
 }
 
@@ -34,13 +35,12 @@ kotlin {
             dependencies {
             }
         }
-        val androidTest by getting {
+        val androidUnitTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation("junit:junit:4.13.2")
             }
         }
-
         val appleMain by creating {
             dependsOn(commonMain)
         }
@@ -74,6 +74,10 @@ android {
         minSdk = AndroidSdk.min
         targetSdk = AndroidSdk.target
     }
-
 }
+
+kotlin.sourceSets.all {
+    languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
+}
+
 
