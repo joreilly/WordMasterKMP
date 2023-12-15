@@ -3,12 +3,13 @@ buildscript {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven(url = "https://androidx.dev/storage/compose-compiler/repository")
     }
 
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlinVersion}")
-        classpath("com.android.tools.build:gradle:7.4.0")
-        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.8.0-1.0.8")
+        classpath("com.android.tools.build:gradle:8.2.0")
+        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.0.0-Beta1-1.0.15")
         classpath("com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:${Versions.kmpNativeCoroutines}")
     }
 }
@@ -18,5 +19,6 @@ allprojects {
         google()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-coroutines/maven")
+        maven(url = "https://androidx.dev/storage/compose-compiler/repository")
     }
 }
