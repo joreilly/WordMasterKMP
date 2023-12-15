@@ -1,16 +1,16 @@
 
 object Versions {
-    const val kotlinVersion = "1.8.0"
-    const val kotlinCoroutines = "1.6.4"
+    const val kotlinVersion = "2.0.0-Beta1"
+    const val kotlinCoroutines = "1.7.3"
 
-    const val compose = "1.4.0-alpha03"
-    const val composeCompiler = "1.4.0"
-    const val composeDesktopWeb = "1.3.0-rc05"
+    const val compose = "1.5.4"
+    const val composeCompiler = "1.5.5-dev-k2.0.0-Beta1-06b8ae672a4"
+    const val composeDesktopWeb = "1.6.0-alpha01"
     const val navCompose = "2.5.2"
     const val accompanist = "0.26.2-beta"
     const val okio = "3.0.0"
 
-    const val kmpNativeCoroutines = "1.0.0-ALPHA-4"
+    const val kmpNativeCoroutines = "1.0.0-ALPHA-18"
 
     const val junit = "4.13"
 }
@@ -18,7 +18,7 @@ object Versions {
 
 object AndroidSdk {
     const val min = 24
-    const val compile = 33
+    const val compile = 34
     const val target = compile
 }
 

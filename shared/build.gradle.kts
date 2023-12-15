@@ -16,10 +16,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(Kotlinx.coroutinesCore) {
-                    isForce = true
-                }
-
+                api(Kotlinx.coroutinesCore)
                 implementation(Square.okio)
             }
         }
@@ -68,11 +65,17 @@ kotlin {
 }
 
 android {
+    namespace = "dev.johnoreilly.wordmaster.shared"
+
     compileSdk = AndroidSdk.compile
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = AndroidSdk.min
         targetSdk = AndroidSdk.target
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
