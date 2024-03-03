@@ -1,6 +1,3 @@
-import org.jetbrains.compose.compose
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     kotlin("jvm")
     id("org.jetbrains.compose") version Versions.composeDesktopWeb
@@ -19,10 +16,6 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(project(":shared"))
 }
-
-//tasks.withType<KotlinCompile> {
-//    kotlinOptions.jvmTarget = "1.8"
-//}
 
 application {
     mainClass.set("MainKt")
