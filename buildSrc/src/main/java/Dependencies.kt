@@ -5,7 +5,7 @@ object Versions {
 
     const val compose = "1.5.4"
     const val composeCompiler = "1.5.5-dev-k2.0.0-Beta1-06b8ae672a4"
-    const val composeDesktopWeb = "1.6.0-alpha01"
+    const val composeDesktopWeb = "1.6.0"
     const val navCompose = "2.5.2"
     const val accompanist = "0.26.2-beta"
     const val okio = "3.0.0"
