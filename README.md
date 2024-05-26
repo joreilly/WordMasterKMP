@@ -63,3 +63,17 @@ Any updates to `boardStatus` or `boardGuesses` will trigger our SwiftUI UI to be
 ![Simulator Screen Shot - iPhone 13 Pro - 2022-01-08 at 22 38 11](https://user-images.githubusercontent.com/6302/148663064-3ed57b1f-c1a3-4e39-b2c2-2ddb3fb09ed9.png)
 
 ![Screenshot_1641682073](https://user-images.githubusercontent.com/6302/148663060-c1047266-425c-4b14-bdaf-b7177a1fa332.png)
+
+## Full set of Kotlin Multiplatform/Compose/SwiftUI samples
+
+*  PeopleInSpace (https://github.com/joreilly/PeopleInSpace)
+*  GalwayBus (https://github.com/joreilly/GalwayBus)
+*  Confetti (https://github.com/joreilly/Confetti)
+*  BikeShare (https://github.com/joreilly/BikeShare)
+*  FantasyPremierLeague (https://github.com/joreilly/FantasyPremierLeague)
+*  ClimateTrace (https://github.com/joreilly/ClimateTraceKMP)
+*  GeminiKMP (https://github.com/joreilly/GeminiKMP)
+*  MortyComposeKMM (https://github.com/joreilly/MortyComposeKMM)
+*  StarWars (https://github.com/joreilly/StarWars)
+*  WordMasterKMP (https://github.com/joreilly/WordMasterKMP)
+*  Chip-8 (https://github.com/joreilly/chip-8)
