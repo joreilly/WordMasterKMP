@@ -1,29 +1,24 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "dev.johnoreilly.wordmaster.androidApp"
 
-    compileSdk = AndroidSdk.compile
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
-        //applicationId = "dev.johnoreilly.wordle.androidApp"
-        minSdk = AndroidSdk.min
-        targetSdk = AndroidSdk.target
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        compileSdk = libs.versions.android.targetSdk.get().toInt()
 
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.composeCompiler
     }
 
     buildTypes {
@@ -43,26 +38,17 @@ android {
 }
 
 
-
 dependencies {
     implementation(project(":shared"))
 
-    with (Compose) {
-        implementation(compiler)
-        implementation(ui)
-        implementation(uiGraphics)
-        implementation(uiTooling)
-        implementation(foundationLayout)
-        implementation(material)
-        implementation(navigation)
-    }
-
-    with(Test) {
-        testImplementation(junit)
-        androidTestImplementation(composeUiTest)
-        androidTestImplementation(composeUiTestJUnit)
-        debugImplementation(composeUiTestManifest)
-    }
-
-    implementation(Google.Accompanist.insets)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.accompanist.insets)
 }

@@ -1,8 +1,8 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("com.google.devtools.ksp")
-    id("com.rickclephas.kmp.nativecoroutines")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kmpNativeCoroutines)
 }
 
 kotlin {
@@ -21,15 +21,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            api(Kotlinx.coroutinesCore)
-            implementation(Square.okio)
+            implementation(libs.kotlinx.coroutines)
+            implementation(libs.okio)
         }
 
-//        commonTest.dependencies {
-//            implementation(Kotlinx.coroutinesTest)
-//            implementation(kotlin("test-common"))
-//            implementation(kotlin("test-annotations-common"))
-//        }
+        commonTest.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(kotlin("test-common"))
+            implementation(kotlin("test-annotations-common"))
+        }
 
         val androidUnitTest by getting {
             dependencies {
@@ -43,11 +43,10 @@ kotlin {
 android {
     namespace = "dev.johnoreilly.wordmaster.shared"
 
-    compileSdk = AndroidSdk.compile
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdk = AndroidSdk.min
-        targetSdk = AndroidSdk.target
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
