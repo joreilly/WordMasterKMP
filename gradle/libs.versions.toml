@@ -1,18 +1,18 @@
 [versions]
-kotlin = "2.0.0"
-ksp = "2.0.0-1.0.21"
-kotlinx-coroutines = "1.8.1"
+kotlin = "2.0.20"
+ksp = "2.0.20-1.0.25"
+kotlinx-coroutines = "1.9.0"
 
 
-agp = "8.4.1"
+agp = "8.5.2"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
-androidx-activityCompose = "1.9.0"
-androidxComposeBom = "2024.05.00"
+androidx-activityCompose = "1.9.2"
+androidxComposeBom = "2024.09.02"
 compose-plugin = "1.6.10"
-accompanist = "0.26.2-beta"
-kmp-nativecoroutines = "1.0.0-ALPHA-31"
+accompanist = "0.30.1"
+kmp-nativecoroutines = "1.0.0-ALPHA-35"
 okio = "3.9.0"
 
 [libraries]
