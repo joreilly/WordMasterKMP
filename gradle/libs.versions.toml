@@ -1,19 +1,19 @@
 [versions]
-kotlin = "2.0.20"
-ksp = "2.0.20-1.0.25"
-kotlinx-coroutines = "1.9.0"
+kotlin = "2.2.0"
+ksp = "2.2.0-2.0.2"
+kotlinx-coroutines = "1.10.2"
 
 
-agp = "8.5.2"
-android-compileSdk = "34"
+agp = "8.11.0"
+android-compileSdk = "36"
 android-minSdk = "24"
-android-targetSdk = "34"
-androidx-activityCompose = "1.9.2"
-androidxComposeBom = "2024.09.02"
-compose-plugin = "1.6.10"
+android-targetSdk = "36"
+androidx-activityCompose = "1.10.1"
+androidxComposeBom = "2025.06.01"
+compose-plugin = "1.8.2"
 accompanist = "0.30.1"
-kmp-nativecoroutines = "1.0.0-ALPHA-35"
-okio = "3.9.0"
+kmp-nativecoroutines = "1.0.0-ALPHA-45"
+okio = "3.15.0"
 
 [libraries]
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }

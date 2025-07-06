@@ -9,6 +9,8 @@ import okio.Path.Companion.toPath
 import dev.johnoreilly.wordmaster.shared.LetterStatus.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.StateFlow
+import okio.SYSTEM
 
 
 enum class LetterStatus {
@@ -26,10 +28,10 @@ class WordMasterService(wordsFilePath: String) {
     var currentGuessAttempt = 0
 
     @NativeCoroutines
-    val boardGuesses = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
+    val boardGuesses: MutableStateFlow<ArrayList<ArrayList<String>>> = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
 
     @NativeCoroutines
-    val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
+    val boardStatus: MutableStateFlow<ArrayList<ArrayList<LetterStatus>>> = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
 
 
     init {
