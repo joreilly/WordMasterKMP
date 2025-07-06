@@ -1,6 +1,6 @@
 # WordMasterKMP
 
-![kotlin-version](https://img.shields.io/badge/kotlin-1.8.0-orange)
+![kotlin-version](https://img.shields.io/badge/kotlin-2.2.0-blue?logo=kotlin)
 
 Kotlin Multiplatform sample heavily inspired by [Wordle](https://www.powerlanguage.co.uk/wordle/) game and also [Word Master](https://github.com/octokatherine/word-master) and [wordle-solver](https://github.com/dlew/wordle-solver) samples.  The main game logic/state is included in shared KMP code with basic UI then in following clients
 - iOS (SwiftUI)
