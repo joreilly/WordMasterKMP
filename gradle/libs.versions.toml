@@ -11,7 +11,6 @@ android-targetSdk = "36"
 androidx-activityCompose = "1.10.1"
 androidxComposeBom = "2025.07.00"
 compose-plugin = "1.8.2"
-accompanist = "0.30.1"
 kmp-nativecoroutines = "1.0.0-ALPHA-45"
 okio = "3.15.0"
 
@@ -23,12 +22,10 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
-androidx-compose-material = { group = "androidx.compose.material", name = "material" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-material3 =  { group = "androidx.compose.material3", name = "material3" }
-accompanist-insets =  { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 
