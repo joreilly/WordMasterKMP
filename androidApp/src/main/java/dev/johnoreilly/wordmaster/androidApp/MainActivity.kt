@@ -4,11 +4,20 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.Center
-import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,9 +31,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat.setDecorFitsSystemWindows
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsPadding
 import dev.johnoreilly.wordmaster.shared.LetterStatus
 import dev.johnoreilly.wordmaster.shared.WordMasterService
 import dev.johnoreilly.wordmaster.androidApp.theme.WordMasterTheme
@@ -32,14 +38,12 @@ import dev.johnoreilly.wordmaster.androidApp.theme.WordMasterTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        setDecorFitsSystemWindows(window, false)
 
         setContent {
             WordMasterTheme {
-                ProvideWindowInsets {
-                    MainLayout()
-                }
+                MainLayout()
             }
         }
     }
@@ -50,14 +54,14 @@ class MainActivity : ComponentActivity() {
 fun MainLayout() {
     Scaffold(
         topBar = { WordMasterTopAppBar("WordMaster KMP") }
-    ) {
-        WordMasterView()
+    ) { innerPadding ->
+        WordMasterView(Modifier.padding(innerPadding))
     }
 }
 
 
 @Composable
-fun WordMasterView() {
+fun WordMasterView(padding: Modifier) {
     val context = LocalContext.current
 
     val wordMasterService = remember {
@@ -71,9 +75,9 @@ fun WordMasterView() {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
-    Row(Modifier.fillMaxSize().padding(16.dp), horizontalArrangement = Center) {
+    Row(padding.fillMaxSize().padding(16.dp), horizontalArrangement = Center) {
 
-        Column {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             for (guessAttempt in 0 until WordMasterService.MAX_NUMBER_OF_GUESSES) {
                 Row(horizontalArrangement = Arrangement.SpaceBetween) {
                     for (character in 0 until WordMasterService.NUMBER_LETTERS) {
@@ -101,12 +105,10 @@ fun WordMasterView() {
                                 },
                                 modifier = modifier,
                                 textStyle = TextStyle(fontSize = 14.sp, textAlign = TextAlign.Center),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
-                                    backgroundColor = mapLetterStatusToBackgroundColor(boardStatus[guessAttempt][character]),
-                                    unfocusedIndicatorColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent
-                                )
+                                colors = TextFieldDefaults.colors(
+                                    unfocusedTextColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
+                                    unfocusedContainerColor = mapLetterStatusToBackgroundColor(boardStatus[guessAttempt][character]),
+                                ),
                             )
 
                             DisposableEffect(Unit) {
@@ -118,7 +120,8 @@ fun WordMasterView() {
                 }
             }
 
-            Row {
+            Spacer(Modifier.height(16.dp))
+            Row(horizontalArrangement = Arrangement.Center) {
                 Button(onClick = {
                     wordMasterService.checkGuess()
                 }) {
@@ -155,14 +158,10 @@ fun mapLetterStatusToTextColor(letterStatus: LetterStatus): Color {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WordMasterTopAppBar(title: String) {
-    Surface(color = MaterialTheme.colors.primary) {
-        TopAppBar(
-            title = { Text(title) },
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp,
-            modifier = Modifier.statusBarsPadding()
-        )
-    }
+    CenterAlignedTopAppBar(
+        title = { Text(title) },
+    )
 }
