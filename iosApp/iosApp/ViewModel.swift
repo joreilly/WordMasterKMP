@@ -43,7 +43,7 @@ class ViewModel: ObservableObject {
             do {
                 let stream = asyncSequence(for: wordMasterService.revealedAnswer)
                 for try await data in stream {
-                    self.revealedAnswer = data as? String
+                    self.revealedAnswer = data
                 }
             } catch {
                 print("Failed with error: \(error)")
