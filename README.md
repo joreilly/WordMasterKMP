@@ -30,7 +30,7 @@ val boardGuesses by wordMasterService.boardGuesses.collectAsState()
 val boardStatus by wordMasterService.boardStatus.collectAsState()
 ```
 <br>
-On iOS we're using [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow`s to Swift `AsyncStream`s.  So, for example, our Swift view model includes
+On iOS we're using [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow` to Swift `AsyncSequence`.  So, for example, our Swift view model includes
 
 ```
 @Published public var boardStatus: [[LetterStatus]] = []
