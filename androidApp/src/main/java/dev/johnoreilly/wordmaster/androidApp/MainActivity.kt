@@ -45,6 +45,7 @@ import androidx.compose.ui.input.key.type
 import dev.johnoreilly.wordmaster.shared.LetterStatus
 import dev.johnoreilly.wordmaster.shared.WordMasterService
 import dev.johnoreilly.wordmaster.androidApp.theme.WordMasterTheme
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 class MainActivity : ComponentActivity() {
@@ -80,10 +81,10 @@ fun WordMasterView(padding: Modifier) {
         WordMasterService(wordsPath)
     }
 
-    val boardGuesses by wordMasterService.boardGuesses.collectAsState()
-    val boardStatus by wordMasterService.boardStatus.collectAsState()
-    val revealedAnswer by wordMasterService.revealedAnswer.collectAsState()
-    val lastGuessCorrect by wordMasterService.lastGuessCorrect.collectAsState()
+    val boardGuesses by wordMasterService.boardGuesses.collectAsStateWithLifecycle()
+    val boardStatus by wordMasterService.boardStatus.collectAsStateWithLifecycle()
+    val revealedAnswer by wordMasterService.revealedAnswer.collectAsStateWithLifecycle()
+    val lastGuessCorrect by wordMasterService.lastGuessCorrect.collectAsStateWithLifecycle()
 
     val focusManager = LocalFocusManager.current
     // FocusRequesters for every cell to enable precise intra-row navigation (e.g., Backspace behavior)

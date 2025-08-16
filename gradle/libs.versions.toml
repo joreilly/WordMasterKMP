@@ -14,6 +14,7 @@ compose-plugin = "1.8.2"
 kmp-nativecoroutines = "1.0.0-ALPHA-45"
 okio = "3.16.0"
 junit = "4.13.2"
+androidxLifecycle = "2.8.6"
 
 [libraries]
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -28,6 +29,7 @@ androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-material3 =  { group = "androidx.compose.material3", name = "material3" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 
