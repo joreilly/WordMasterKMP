@@ -77,3 +77,4 @@ Any updates to `boardStatus` or `boardGuesses` will trigger our SwiftUI UI to be
 *  StarWars (https://github.com/joreilly/StarWars)
 *  WordMasterKMP (https://github.com/joreilly/WordMasterKMP)
 *  Chip-8 (https://github.com/joreilly/chip-8)
+*  FirebaseAILogicKMPSample (https://github.com/joreilly/FirebaseAILogicKMPSample)

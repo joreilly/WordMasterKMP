@@ -9,6 +9,8 @@ class ViewModel: ObservableObject {
     private let wordMasterService: WordMasterService
     @Published public var boardStatus: [[LetterStatus]] = []
     @Published public var boardGuesses: [[String]] = []
+    @Published public var revealedAnswer: String? = nil
+    @Published public var lastGuessCorrect: Bool = false
     
     init() {
         let wordsPath = Bundle.main.path(forResource: "words", ofType: "txt") ?? ""
@@ -37,6 +39,26 @@ class ViewModel: ObservableObject {
             }
 
         }
+        Task {
+            do {
+                let stream = asyncSequence(for: wordMasterService.revealedAnswer)
+                for try await data in stream {
+                    self.revealedAnswer = data as? String
+                }
+            } catch {
+                print("Failed with error: \(error)")
+            }
+        }
+        Task {
+            do {
+                let stream = asyncSequence(for: wordMasterService.lastGuessCorrect)
+                for try await data in stream {
+                    self.lastGuessCorrect = (data as? Bool) ?? false
+                }
+            } catch {
+                print("Failed with error: \(error)")
+            }
+        }
     }
 
     func getMaxNumberGuesses() -> Int {
@@ -47,6 +69,9 @@ class ViewModel: ObservableObject {
         return Int(WordMasterService.companion.NUMBER_LETTERS)
     }
 
+    func getCurrentGuessAttempt() -> Int {
+        return Int(wordMasterService.currentGuessAttempt)
+    }
     
     func setGuess(guessAttempt: Int, character: Int, guess: String) {
         wordMasterService.setGuess(guessAttempt: Int32(guessAttempt), character: Int32(character), guess: guess)

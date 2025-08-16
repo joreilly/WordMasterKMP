@@ -33,6 +33,12 @@ class WordMasterService(wordsFilePath: String) {
     @NativeCoroutines
     val boardStatus: MutableStateFlow<ArrayList<ArrayList<LetterStatus>>> = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
 
+    @NativeCoroutines
+    val revealedAnswer: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    @NativeCoroutines
+    val lastGuessCorrect: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
 
     init {
         println("wordsFilePath = $wordsFilePath")
@@ -44,6 +50,8 @@ class WordMasterService(wordsFilePath: String) {
         currentGuessAttempt = 0
         answer = validWords.random().uppercase()
         println("answer! = $answer")
+        revealedAnswer.value = null
+        lastGuessCorrect.value = false
 
         // set default values for guesses/letter status info
         val newBoardStatus = arrayListOf<ArrayList<LetterStatus>>()
@@ -86,7 +94,16 @@ class WordMasterService(wordsFilePath: String) {
             currentStatusCopy[currentGuessAttempt] = status
             boardStatus.value = currentStatusCopy
 
+            val isCorrect = status.all { it == CORRECT_POSITION }
+            if ( isCorrect ) {
+                lastGuessCorrect.value = true
+            }
             currentGuessAttempt++
+
+            // Reveal the answer if all guesses are completed and the word wasn't guessed
+            if (!isCorrect && currentGuessAttempt >= MAX_NUMBER_OF_GUESSES) {
+                revealedAnswer.value = answer
+            }
         }
     }
 
