@@ -40,12 +40,12 @@ On iOS we're using [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-Nat
 which are then updated using for example
 
 ```
-let stream = asyncStream(for: wordMasterService.boardStatusNative)
+let stream = asyncSequence(for: wordMasterService.boardStatusNative)
 for try await data in stream {
   self.boardStatus = data as! [[LetterStatus]]
 }
 
-let stream = asyncStream(for: wordMasterService.boardGuessesNative)
+let stream = asyncSequence(for: wordMasterService.boardGuessesNative)
 for try await data in stream {
     self.boardGuesses = data as! [[String]]
 }
