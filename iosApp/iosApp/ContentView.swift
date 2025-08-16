@@ -23,7 +23,8 @@ struct ContentView: View {
                                     let upper = newValue.uppercased()
                                     let capped = String(upper.prefix(1))
 
-                                    if capped != viewModel.getGuess(guessAttempt: guessNumber, character: character) {
+                                    let previous = viewModel.getGuess(guessAttempt: guessNumber, character: character)
+                                    if capped != previous {
                                         viewModel.setGuess(guessAttempt: guessNumber, character: character, guess: capped)
 
                                         // Move focus to the next cell when a single character is entered
@@ -34,8 +35,13 @@ struct ContentView: View {
                                                 DispatchQueue.main.async {
                                                     focusedPos = FocusPos(row: guessNumber, col: nextCol)
                                                 }
-                                            } else {
-                                                // Optionally keep focus or move to next row's first cell; we'll keep it here
+                                            }
+                                        } else {
+                                            // If we deleted the last character in this cell, move back to previous cell in same row
+                                            if !previous.isEmpty && character > 0 {
+                                                DispatchQueue.main.async {
+                                                    focusedPos = FocusPos(row: guessNumber, col: character - 1)
+                                                }
                                             }
                                         }
                                     }

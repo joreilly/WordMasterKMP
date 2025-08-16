@@ -37,6 +37,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -85,7 +86,10 @@ fun WordMasterView(padding: Modifier) {
     val lastGuessCorrect by wordMasterService.lastGuessCorrect.collectAsState()
 
     val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
+    // FocusRequesters for every cell to enable precise intra-row navigation (e.g., Backspace behavior)
+    val cellRequesters = remember {
+        List(WordMasterService.MAX_NUMBER_OF_GUESSES) { List(WordMasterService.NUMBER_LETTERS) { FocusRequester() } }
+    }
 
     Row(padding.fillMaxSize().padding(16.dp), horizontalArrangement = Center, verticalAlignment = Alignment.CenterVertically) {
 
@@ -98,43 +102,73 @@ fun WordMasterView(padding: Modifier) {
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
-                            var modifier = Modifier.width(55.dp).height(55.dp)
-                            if (guessAttempt == 0 && character == 0) {
-                                modifier = modifier.focusRequester(focusRequester)
-                            }
+                            var modifier = Modifier.width(55.dp).height(55.dp).focusRequester(cellRequesters[guessAttempt][character])
 
                             TextField(
                                 value = boardGuesses[guessAttempt][character],
-                                onValueChange = {
-                                    if (it.length <= 1 && guessAttempt == wordMasterService.currentGuessAttempt) {
-                                        wordMasterService.setGuess(
-                                            guessAttempt,
-                                            character,
-                                            it.uppercase()
-                                        )
-                                        if (it.isNotEmpty() && character < WordMasterService.NUMBER_LETTERS - 1) {
-                                            // Only move within the same row; don't advance to the next row until the guess is submitted
-                                            focusManager.moveFocus(FocusDirection.Next)
+                                onValueChange = { newValue ->
+                                    if (guessAttempt == wordMasterService.currentGuessAttempt) {
+                                        val upper = newValue.uppercase()
+                                        val capped = if (upper.length > 1) upper.substring(0, 1) else upper
+                                        val previous = boardGuesses[guessAttempt][character]
+
+                                        if (capped != previous) {
+                                            wordMasterService.setGuess(
+                                                guessAttempt,
+                                                character,
+                                                capped
+                                            )
+                                        }
+
+                                        if (capped.isNotEmpty()) {
+                                            if (character < WordMasterService.NUMBER_LETTERS - 1) {
+                                                // Advance to next column in the same row
+                                                focusManager.moveFocus(FocusDirection.Next)
+                                            }
+                                        } else {
+                                            // If we deleted the last character in this cell, move back to previous cell in same row
+                                            if (previous.isNotEmpty() && character > 0) {
+                                                cellRequesters[guessAttempt][character - 1].requestFocus()
+                                            }
                                         }
                                     }
                                 },
-                                modifier = modifier.onKeyEvent {
-                                    if (it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter)) {
-                                        if (guessAttempt == wordMasterService.currentGuessAttempt) {
-                                            var filled = true
-                                            for (c in 0 until WordMasterService.NUMBER_LETTERS) {
-                                                if (boardGuesses[guessAttempt][c].isEmpty()) { filled = false; break }
-                                            }
-                                            if (filled) {
-                                                wordMasterService.checkGuess()
-                                                // After submitting a guess, move focus to the next row's first cell
-                                                focusManager.moveFocus(FocusDirection.Next)
-                                                return@onKeyEvent true
+                                modifier = modifier
+                                    .onPreviewKeyEvent {
+                                        if (guessAttempt == wordMasterService.currentGuessAttempt && (it.key == Key.Backspace || it.key == Key.Delete) && it.type == KeyEventType.KeyDown) {
+                                            val currentVal = boardGuesses[guessAttempt][character]
+                                            if (currentVal.isEmpty() && character > 0) {
+                                                cellRequesters[guessAttempt][character - 1].requestFocus()
+                                                return@onPreviewKeyEvent true
                                             }
                                         }
+                                        false
                                     }
-                                    false
-                                }
+                                    .onKeyEvent {
+                                        if (it.type == KeyEventType.KeyUp && it.key == Key.Backspace) {
+                                            if (guessAttempt == wordMasterService.currentGuessAttempt) {
+                                                val currentVal = boardGuesses[guessAttempt][character]
+                                                if (currentVal.isEmpty() && character > 0) {
+                                                    cellRequesters[guessAttempt][character - 1].requestFocus()
+                                                    return@onKeyEvent true
+                                                }
+                                            }
+                                        } else if (it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter)) {
+                                            if (guessAttempt == wordMasterService.currentGuessAttempt) {
+                                                var filled = true
+                                                for (c in 0 until WordMasterService.NUMBER_LETTERS) {
+                                                    if (boardGuesses[guessAttempt][c].isEmpty()) { filled = false; break }
+                                                }
+                                                if (filled) {
+                                                    wordMasterService.checkGuess()
+                                                    // After submitting a guess, move focus to the next row's first cell
+                                                    focusManager.moveFocus(FocusDirection.Next)
+                                                    return@onKeyEvent true
+                                                }
+                                            }
+                                        }
+                                        false
+                                    }
                                 .border(1.dp, Color.Black.copy(alpha = 0.6f), androidx.compose.foundation.shape.RoundedCornerShape(10.dp)),
                                 singleLine = true,
                                 keyboardOptions = KeyboardOptions(
@@ -173,9 +207,11 @@ fun WordMasterView(padding: Modifier) {
                                 ),
                             )
 
-                            DisposableEffect(Unit) {
-                                focusRequester.requestFocus()
-                                onDispose { }
+                            if (guessAttempt == 0 && character == 0) {
+                                DisposableEffect(Unit) {
+                                    cellRequesters[0][0].requestFocus()
+                                    onDispose { }
+                                }
                             }
                         }
                     }
@@ -211,7 +247,7 @@ fun WordMasterView(padding: Modifier) {
                 Spacer(Modifier.width(16.dp))
                 Button(onClick = {
                     wordMasterService.resetGame()
-                    focusRequester.requestFocus()
+                    cellRequesters[0][0].requestFocus()
                 }) {
                     Text("New Game")
                 }
@@ -226,7 +262,7 @@ fun WordMasterView(padding: Modifier) {
                         Button(onClick = {
                             wordMasterService.resetGame()
                             // Re-focus first cell after reset
-                            focusRequester.requestFocus()
+                            cellRequesters[0][0].requestFocus()
                         }) {
                             Text("OK")
                         }

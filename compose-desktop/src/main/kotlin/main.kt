@@ -46,15 +46,14 @@ fun WordMasterView() {
     val lastGuessCorrect by wordMasterService.lastGuessCorrect.collectAsState()
 
     val focusManager = LocalFocusManager.current
-    // FocusRequesters for the first cell of each row to allow precise focusing after submission
-    val rowFirstCellRequesters = remember { List(WordMasterService.MAX_NUMBER_OF_GUESSES) { FocusRequester() } }
+    // FocusRequesters for every cell to precisely control focus navigation within rows
+    val cellRequesters = remember { List(WordMasterService.MAX_NUMBER_OF_GUESSES) { List(WordMasterService.NUMBER_LETTERS) { FocusRequester() } } }
 
     // Ensure focus shifts to the first cell of the current row after a guess submission/recomposition
     val currentAttempt = wordMasterService.currentGuessAttempt
     LaunchedEffect(currentAttempt) {
         if (currentAttempt in 0 until WordMasterService.MAX_NUMBER_OF_GUESSES) {
-            // Post-recomposition, request focus on the first cell of the active row
-            rowFirstCellRequesters[currentAttempt].requestFocus()
+            cellRequesters[currentAttempt][0].requestFocus()
         }
     }
 
@@ -73,13 +72,10 @@ fun WordMasterView() {
                     // Move focus explicitly to next row’s first cell
                     val nextRow = current + 1
                     if (nextRow < WordMasterService.MAX_NUMBER_OF_GUESSES) {
-                        rowFirstCellRequesters[nextRow].requestFocus()
+                        cellRequesters[nextRow][0].requestFocus()
                     }
                     true
                 } else false
-            } else if (it.key == Key.Backspace) {
-                focusManager.moveFocus(FocusDirection.Previous)
-                true
             } else  {
                 false
             }
@@ -97,9 +93,7 @@ fun WordMasterView() {
                                 .padding(2.dp)
                                 .width(64.dp)
                                 .height(64.dp)
-                            if (character == 0) {
-                                modifier = modifier.focusRequester(rowFirstCellRequesters[guessAttempt])
-                            }
+                            modifier = modifier.focusRequester(cellRequesters[guessAttempt][character])
 
                             TextField(
                                 enabled = guessAttempt == wordMasterService.currentGuessAttempt,
@@ -121,7 +115,15 @@ fun WordMasterView() {
                                         }
                                     }
                                 },
-                                modifier = modifier.border(1.dp, Black.copy(alpha = 0.6f), RoundedCornerShape(10.dp)),
+                                modifier = modifier.border(1.dp, Black.copy(alpha = 0.6f), RoundedCornerShape(10.dp)).onKeyEvent {
+                                                                    if (it.key == Key.Backspace && guessAttempt == wordMasterService.currentGuessAttempt) {
+                                                                        val currentVal = boardGuesses[guessAttempt][character]
+                                                                        if (currentVal.isEmpty() && character > 0) {
+                                                                            cellRequesters[guessAttempt][character - 1].requestFocus()
+                                                                            true
+                                                                        } else false
+                                                                    } else false
+                                                                },
                                 singleLine = true,
                                 textStyle = TextStyle(fontSize = 20.sp, textAlign = TextAlign.Center),
                                 colors = TextFieldDefaults.textFieldColors(
@@ -136,7 +138,7 @@ fun WordMasterView() {
 
                             if (guessAttempt == 0 && character == 0) {
                                 DisposableEffect(Unit) {
-                                    rowFirstCellRequesters[0].requestFocus()
+                                    cellRequesters[0][0].requestFocus()
                                     onDispose { }
                                 }
                             }
@@ -165,7 +167,7 @@ fun WordMasterView() {
                         // Move focus explicitly to next row’s first cell
                         val nextRow = current + 1
                         if (nextRow < WordMasterService.MAX_NUMBER_OF_GUESSES) {
-                            rowFirstCellRequesters[nextRow].requestFocus()
+                            cellRequesters[nextRow][0].requestFocus()
                         }
                     }
                 }) {
@@ -174,7 +176,7 @@ fun WordMasterView() {
                 Spacer(Modifier.width(16.dp))
                 Button(onClick = {
                     wordMasterService.resetGame()
-                    rowFirstCellRequesters[0].requestFocus()
+                    cellRequesters[0][0].requestFocus()
                 }) {
                     Text("New Game")
                 }
@@ -188,7 +190,7 @@ fun WordMasterView() {
                     confirmButton = {
                         Button(onClick = {
                             wordMasterService.resetGame()
-                            rowFirstCellRequesters[0].requestFocus()
+                            cellRequesters[0][0].requestFocus()
                         }) {
                             Text("OK")
                         }
