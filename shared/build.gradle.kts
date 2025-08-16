@@ -29,13 +29,6 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
             implementation(kotlin("test"))
         }
-
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.13.2")
-            }
-        }
     }
 }
 
@@ -43,7 +36,6 @@ android {
     namespace = "dev.johnoreilly.wordmaster.shared"
 
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }

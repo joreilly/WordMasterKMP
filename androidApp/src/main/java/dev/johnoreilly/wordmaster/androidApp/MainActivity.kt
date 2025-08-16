@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -29,8 +30,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import dev.johnoreilly.wordmaster.shared.LetterStatus
 import dev.johnoreilly.wordmaster.shared.WordMasterService
 import dev.johnoreilly.wordmaster.androidApp.theme.WordMasterTheme
@@ -55,7 +65,7 @@ fun MainLayout() {
     Scaffold(
         topBar = { WordMasterTopAppBar("WordMaster KMP") }
     ) { innerPadding ->
-        WordMasterView(Modifier.padding(innerPadding))
+        WordMasterView(Modifier.padding(innerPadding).imePadding())
     }
 }
 
@@ -71,18 +81,20 @@ fun WordMasterView(padding: Modifier) {
 
     val boardGuesses by wordMasterService.boardGuesses.collectAsState()
     val boardStatus by wordMasterService.boardStatus.collectAsState()
+    val revealedAnswer by wordMasterService.revealedAnswer.collectAsState()
+    val lastGuessCorrect by wordMasterService.lastGuessCorrect.collectAsState()
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
-    Row(padding.fillMaxSize().padding(16.dp), horizontalArrangement = Center) {
+    Row(padding.fillMaxSize().padding(16.dp), horizontalArrangement = Center, verticalAlignment = Alignment.CenterVertically) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             for (guessAttempt in 0 until WordMasterService.MAX_NUMBER_OF_GUESSES) {
-                Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(horizontalArrangement = Arrangement.Center) {
                     for (character in 0 until WordMasterService.NUMBER_LETTERS) {
                         Column(
-                            Modifier.padding(4.dp).background(Color.White).border(1.dp, Color.Black),
+                            Modifier.padding(4.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
@@ -100,14 +112,64 @@ fun WordMasterView(padding: Modifier) {
                                             character,
                                             it.uppercase()
                                         )
-                                        focusManager.moveFocus(FocusDirection.Next)
+                                        if (it.isNotEmpty() && character < WordMasterService.NUMBER_LETTERS - 1) {
+                                            // Only move within the same row; don't advance to the next row until the guess is submitted
+                                            focusManager.moveFocus(FocusDirection.Next)
+                                        }
                                     }
                                 },
-                                modifier = modifier,
+                                modifier = modifier.onKeyEvent {
+                                    if (it.type == KeyEventType.KeyUp && (it.key == Key.Enter || it.key == Key.NumPadEnter)) {
+                                        if (guessAttempt == wordMasterService.currentGuessAttempt) {
+                                            var filled = true
+                                            for (c in 0 until WordMasterService.NUMBER_LETTERS) {
+                                                if (boardGuesses[guessAttempt][c].isEmpty()) { filled = false; break }
+                                            }
+                                            if (filled) {
+                                                wordMasterService.checkGuess()
+                                                // After submitting a guess, move focus to the next row's first cell
+                                                focusManager.moveFocus(FocusDirection.Next)
+                                                return@onKeyEvent true
+                                            }
+                                        }
+                                    }
+                                    false
+                                }
+                                .border(1.dp, Color.Black.copy(alpha = 0.6f), androidx.compose.foundation.shape.RoundedCornerShape(10.dp)),
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(
+                                    capitalization = KeyboardCapitalization.Characters,
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        if (guessAttempt == wordMasterService.currentGuessAttempt) {
+                                            var filled = true
+                                            for (c in 0 until WordMasterService.NUMBER_LETTERS) {
+                                                if (boardGuesses[guessAttempt][c].isEmpty()) { filled = false; break }
+                                            }
+                                            if (filled) {
+                                                wordMasterService.checkGuess()
+                                                // After submitting a guess, move focus to the next row's first cell
+                                                focusManager.moveFocus(FocusDirection.Next)
+                                            }
+                                        }
+                                    }
+                                ),
                                 textStyle = TextStyle(fontSize = 14.sp, textAlign = TextAlign.Center),
+                                shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp),
                                 colors = TextFieldDefaults.colors(
+                                    focusedTextColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
                                     unfocusedTextColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
+                                    disabledTextColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
+                                    cursorColor = mapLetterStatusToTextColor(boardStatus[guessAttempt][character]),
+                                    focusedContainerColor = mapLetterStatusToBackgroundColor(boardStatus[guessAttempt][character]),
                                     unfocusedContainerColor = mapLetterStatusToBackgroundColor(boardStatus[guessAttempt][character]),
+                                    disabledContainerColor = mapLetterStatusToBackgroundColor(boardStatus[guessAttempt][character]),
+                                    focusedIndicatorColor = Color.Transparent,
+                                    unfocusedIndicatorColor = Color.Transparent,
+                                    disabledIndicatorColor = Color.Transparent,
+                                    errorIndicatorColor = Color.Transparent,
                                 ),
                             )
 
@@ -121,9 +183,28 @@ fun WordMasterView(padding: Modifier) {
             }
 
             Spacer(Modifier.height(16.dp))
+
+            if (revealedAnswer != null) {
+                Text(
+                    text = "Answer: $revealedAnswer",
+                    style = TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
+                )
+                Spacer(Modifier.height(12.dp))
+            }
+
             Row(horizontalArrangement = Arrangement.Center) {
                 Button(onClick = {
-                    wordMasterService.checkGuess()
+                    // Only submit and advance focus if the current row is filled
+                    val current = wordMasterService.currentGuessAttempt
+                    var filled = true
+                    for (c in 0 until WordMasterService.NUMBER_LETTERS) {
+                        if (boardGuesses[current][c].isEmpty()) { filled = false; break }
+                    }
+                    if (filled) {
+                        wordMasterService.checkGuess()
+                        // Move focus to next row's first cell
+                        focusManager.moveFocus(FocusDirection.Next)
+                    }
                 }) {
                     Text("Guess")
                 }
@@ -134,6 +215,23 @@ fun WordMasterView(padding: Modifier) {
                 }) {
                     Text("New Game")
                 }
+            }
+
+            if (lastGuessCorrect) {
+                androidx.compose.material3.AlertDialog(
+                    onDismissRequest = { /* keep dialog until OK pressed */ },
+                    title = { Text("You win!") },
+                    text = { Text("Great job guessing the word.") },
+                    confirmButton = {
+                        Button(onClick = {
+                            wordMasterService.resetGame()
+                            // Re-focus first cell after reset
+                            focusRequester.requestFocus()
+                        }) {
+                            Text("OK")
+                        }
+                    }
+                )
             }
         }
     }
