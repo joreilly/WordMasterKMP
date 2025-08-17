@@ -18,8 +18,8 @@ Kotlin Multiplatform sample heavily inspired by [Wordle](https://www.powerlangua
 The shared `WordMasterService` class includes following `StateFlow`s representing the current set of guesses and updated status info for each letter.
 
 ```
-val boardGuesses = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
-val boardStatus = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
+val boardGuesses = StateFlow<ArrayList<ArrayList<String>>>()
+val boardStatus = StateFlow<ArrayList<ArrayList<LetterStatus>>>()
 ```
 
 The various clients call `WordService.setGuess()` when a user enters a letter and then `WordService.checkGuess()` after row of letters
@@ -29,8 +29,8 @@ are entered...UI then reflects any resulting updates to above `StateFlow`'s.  Th
 val boardGuesses by wordMasterService.boardGuesses.collectAsState()
 val boardStatus by wordMasterService.boardStatus.collectAsState()
 ```
-<br>
-On iOS we're using [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow` to Swift `AsyncSequence`.  So, for example, our Swift view model includes
+<br/>
+On iOS we're using the [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow` to Swift `AsyncSequence`.  So, for example, our Swift view model includes
 
 ```
 @Published public var boardStatus: [[LetterStatus]] = []
