@@ -29,7 +29,8 @@ are entered...UI then reflects any resulting updates to above `StateFlow`'s.  Th
 val boardGuesses by wordMasterService.boardGuesses.collectAsState()
 val boardStatus by wordMasterService.boardStatus.collectAsState()
 ```
-<br/>
+
+
 On iOS we're using the [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow` to Swift `AsyncSequence`.  So, for example, our Swift view model includes
 
 ```
