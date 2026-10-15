@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           java-version: 17
@@ -35,6 +35,11 @@ jobs:
           key: ${{ runner.os }}-konan-${{ hashFiles('**/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-konan-
+
+      # Compile (not run) the shared tests for Kotlin/Native: jvmTest runs them, and running here
+      # would need the test's words.txt path to resolve inside the simulator.
+      - name: Compile shared tests for iOS
+        run: ./gradlew :shared:compileTestKotlinIosSimulatorArm64
 
       - name: Build iOS app
         run: |
