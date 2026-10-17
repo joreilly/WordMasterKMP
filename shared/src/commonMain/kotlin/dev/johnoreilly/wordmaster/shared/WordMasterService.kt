@@ -1,7 +1,5 @@
 package dev.johnoreilly.wordmaster.shared
 
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutineScope
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import kotlinx.coroutines.flow.MutableStateFlow
 import okio.FileSystem
 import okio.Path
@@ -18,7 +16,6 @@ enum class LetterStatus {
 
 
 class WordMasterService(wordsFilePath: String) {
-    @NativeCoroutineScope
     val coroutineScope: CoroutineScope = MainScope()
 
     private val validWords = mutableListOf<String>()
@@ -27,24 +24,18 @@ class WordMasterService(wordsFilePath: String) {
     var answer = ""
     var currentGuessAttempt = 0
 
-    @NativeCoroutines
-    val boardGuesses: MutableStateFlow<ArrayList<ArrayList<String>>> = MutableStateFlow<ArrayList<ArrayList<String>>>(arrayListOf())
+    val boardGuesses: MutableStateFlow<List<List<String>>> = MutableStateFlow(emptyList())
 
-    @NativeCoroutines
-    val boardStatus: MutableStateFlow<ArrayList<ArrayList<LetterStatus>>> = MutableStateFlow<ArrayList<ArrayList<LetterStatus>>>(arrayListOf())
+    val boardStatus: MutableStateFlow<List<List<LetterStatus>>> = MutableStateFlow(emptyList())
 
-    @NativeCoroutines
     val revealedAnswer: MutableStateFlow<String?> = MutableStateFlow(null)
 
-    @NativeCoroutines
     val lastGuessCorrect: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     // Best-known status for each letter typed so far, used to colour the on-screen keyboard.
-    @NativeCoroutines
     val keyStatus: MutableStateFlow<Map<String, LetterStatus>> = MutableStateFlow(emptyMap())
 
     // Transient message shown to the user when a guess is rejected (e.g. too short / not a word).
-    @NativeCoroutines
     val guessError: MutableStateFlow<String?> = MutableStateFlow(null)
 
 
