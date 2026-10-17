@@ -1,4 +1,5 @@
-appId: orgIdentifier.iosApp
+# Shared by the Android and iOS apps: CI passes APP_ID with -e
+appId: ${APP_ID}
 ---
 - launchApp:
     clearState: true

@@ -62,6 +62,11 @@ Any updates to `boardStatus` or `boardGuesses` will trigger our SwiftUI UI to be
 
 
 
+### UI tests
+
+There's a [Maestro](https://maestro.mobile.dev/) UI test flow shared by the Android and iOS clients, run by CI on
+an emulator and a simulator (e.g. `maestro test -e APP_ID=dev.johnoreilly.wordmaster.androidApp maestro/WordMaster.flow`).
+
 ## Full set of Kotlin Multiplatform/Compose/SwiftUI samples
 
 *  PeopleInSpace (https://github.com/joreilly/PeopleInSpace)
