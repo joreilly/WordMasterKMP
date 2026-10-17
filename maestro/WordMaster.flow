@@ -1,0 +1,20 @@
+appId: orgIdentifier.iosApp
+---
+- launchApp:
+    clearState: true
+
+- assertVisible: "WordMaster KMP"
+
+# Enter a valid guess (distinct letters, so each key label is unique on screen when tapped)
+- tapOn: "C"
+- tapOn: "R"
+- tapOn: "A"
+- tapOn: "N"
+- tapOn: "E"
+- tapOn: "ENTER"
+
+# Scoring the guess emits a new board status, so the app must still be up and showing the board
+- assertVisible: "WordMaster KMP"
+- assertVisible: "C"
+
+- takeScreenshot: WordMaster
