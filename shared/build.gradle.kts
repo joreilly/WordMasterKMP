@@ -1,11 +1,18 @@
 plugins {
     kotlin("multiplatform")
     alias(libs.plugins.androidKmpLibrary)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.kmpNativeCoroutines)
 }
 
 kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.swiftexport.ExperimentalSwiftExportDsl::class)
+    export {
+        swift {
+            moduleName = "shared"
+            rootPackage = "dev.johnoreilly.wordmaster.shared"
+            xcodeIntegration()
+        }
+    }
+
     android {
         namespace = "dev.johnoreilly.wordmaster.shared"
 

@@ -1,6 +1,5 @@
 import SwiftUI
 import shared
-import KMPNativeCoroutinesAsync
 
 struct ContentView: View {
     @StateObject private var viewModel = ViewModel()

@@ -1,7 +1,6 @@
 import Foundation
 import SwiftUI
 import shared
-import KMPNativeCoroutinesAsync
 
 
 @MainActor
@@ -20,9 +19,9 @@ class ViewModel: ObservableObject {
 
         Task {
             do {
-                let stream = asyncSequence(for: wordMasterService.boardStatus)
+                let stream = wordMasterService.boardStatus.asAsyncSequence()
                 for try await data in stream {
-                    self.boardStatus = data as! [[LetterStatus]]
+                    self.boardStatus = data
                 }
             } catch {
                 print("Failed with error: \(error)")
@@ -30,9 +29,9 @@ class ViewModel: ObservableObject {
         }
         Task {
             do {
-                let stream = asyncSequence(for: wordMasterService.boardGuesses)
+                let stream = wordMasterService.boardGuesses.asAsyncSequence()
                 for try await data in stream {
-                    self.boardGuesses = data as! [[String]]
+                    self.boardGuesses = data
                 }
             } catch {
                 print("Failed with error: \(error)")
@@ -40,9 +39,9 @@ class ViewModel: ObservableObject {
         }
         Task {
             do {
-                let stream = asyncSequence(for: wordMasterService.keyStatus)
+                let stream = wordMasterService.keyStatus.asAsyncSequence()
                 for try await data in stream {
-                    self.keyStatus = data as! [String: LetterStatus]
+                    self.keyStatus = data
                 }
             } catch {
                 print("Failed with error: \(error)")
@@ -50,7 +49,7 @@ class ViewModel: ObservableObject {
         }
         Task {
             do {
-                let stream = asyncSequence(for: wordMasterService.revealedAnswer)
+                let stream = wordMasterService.revealedAnswer.asAsyncSequence()
                 for try await data in stream {
                     self.revealedAnswer = data
                 }
@@ -60,9 +59,9 @@ class ViewModel: ObservableObject {
         }
         Task {
             do {
-                let stream = asyncSequence(for: wordMasterService.lastGuessCorrect)
+                let stream = wordMasterService.lastGuessCorrect.asAsyncSequence()
                 for try await data in stream {
-                    self.lastGuessCorrect = (data as? Bool) ?? false
+                    self.lastGuessCorrect = data
                 }
             } catch {
                 print("Failed with error: \(error)")
@@ -70,7 +69,7 @@ class ViewModel: ObservableObject {
         }
         Task {
             do {
-                let stream = asyncSequence(for: wordMasterService.guessError)
+                let stream = wordMasterService.guessError.asAsyncSequence()
                 for try await data in stream {
                     self.guessError = data
                 }
@@ -81,11 +80,11 @@ class ViewModel: ObservableObject {
     }
 
     func getMaxNumberGuesses() -> Int {
-        return Int(WordMasterService.companion.MAX_NUMBER_OF_GUESSES)
+        return Int(WordMasterService.Companion.shared.MAX_NUMBER_OF_GUESSES)
     }
 
     func getMaxNumberLetters() -> Int {
-        return Int(WordMasterService.companion.NUMBER_LETTERS)
+        return Int(WordMasterService.Companion.shared.NUMBER_LETTERS)
     }
 
     func getCurrentGuessAttempt() -> Int {
@@ -104,38 +103,38 @@ class ViewModel: ObservableObject {
         if (boardStatus.count > 0) {
             return boardStatus[guessAttempt][character]
         } else {
-            return .unguessed
+            return .UNGUESSED
         }
     }
 
     func backgroundColor(for status: LetterStatus) -> Color {
         switch status {
-            case .correctPosition: return Color(red: 0.18, green: 0.49, blue: 0.20)
-            case .incorrectPosition: return Color(red: 0.61, green: 0.53, blue: 0.05)
-            case .notInWord: return Color(red: 0.47, green: 0.49, blue: 0.49)
+            case .CORRECT_POSITION: return Color(red: 0.18, green: 0.49, blue: 0.20)
+            case .INCORRECT_POSITION: return Color(red: 0.61, green: 0.53, blue: 0.05)
+            case .NOT_IN_WORD: return Color(red: 0.47, green: 0.49, blue: 0.49)
             default: return .white
         }
     }
 
     func textColor(for status: LetterStatus) -> Color {
         switch status {
-            case .unguessed: return .black
+            case .UNGUESSED: return .black
             default: return .white
         }
     }
 
     // Colour for an on-screen keyboard key (unguessed keys use a light grey).
     func keyBackgroundColor(_ letter: String) -> Color {
-        let status = keyStatus[letter] ?? .unguessed
-        if status == .unguessed {
+        let status = keyStatus[letter] ?? .UNGUESSED
+        if status == .UNGUESSED {
             return Color(red: 0.83, green: 0.84, blue: 0.85)
         }
         return backgroundColor(for: status)
     }
 
     func keyTextColor(_ letter: String) -> Color {
-        let status = keyStatus[letter] ?? .unguessed
-        return status == .unguessed ? .black : .white
+        let status = keyStatus[letter] ?? .UNGUESSED
+        return status == .UNGUESSED ? .black : .white
     }
 
     func addLetter(_ letter: String) {
