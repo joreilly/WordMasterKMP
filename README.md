@@ -36,7 +36,7 @@ val keyStatus by wordMasterService.keyStatus.collectAsState()
 ```
 
 
-On iOS we're using the [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines) library to map the `StateFlow` to Swift `AsyncSequence`.  So, for example, our Swift view model includes
+On iOS we're using Kotlin's [Swift export](https://kotlinlang.org/docs/native-swift-export.html), which maps `StateFlow` to a typed Swift `AsyncSequence`.  So, for example, our Swift view model includes
 
 ```
 @Published public var boardStatus: [[LetterStatus]] = []
@@ -46,16 +46,13 @@ On iOS we're using the [KMP-NativeCoroutines](https://github.com/rickclephas/KMP
 which are then updated using for example
 
 ```
-let stream = asyncSequence(for: wordMasterService.boardStatus)
-for try await data in stream {
-  self.boardStatus = data as! [[LetterStatus]]
+for try await data in wordMasterService.boardStatus.asAsyncSequence() {
+    self.boardStatus = data
 }
 
-let stream = asyncSequence(for: wordMasterService.boardGuesses)
-for try await data in stream {
-    self.boardGuesses = data as! [[String]]
+for try await data in wordMasterService.boardGuesses.asAsyncSequence() {
+    self.boardGuesses = data
 }
-
 ```
 
 Any updates to `boardStatus` or `boardGuesses` will trigger our SwiftUI UI to be recomposed again.

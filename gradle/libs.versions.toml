@@ -1,6 +1,5 @@
 [versions]
-kotlin = "2.4.10"
-ksp = "2.3.10"
+kotlin = "2.5.0-Beta2"
 kotlinx-coroutines = "1.11.0"
 
 
@@ -11,7 +10,6 @@ android-targetSdk = "37"
 androidx-activityCompose = "1.13.0"
 androidxComposeBom = "2026.06.01"
 compose-plugin = "1.11.1"
-kmp-nativecoroutines = "1.0.5"
 okio = "3.17.0"
 junit = "4.13.2"
 androidxLifecycle = "2.11.0"
@@ -36,8 +34,6 @@ okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidKmpLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kmpNativeCoroutines = { id = "com.rickclephas.kmp.nativecoroutines", version.ref = "kmp-nativecoroutines" }
