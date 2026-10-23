@@ -19,9 +19,9 @@ class ViewModel: ObservableObject {
 
         Task {
             do {
-                let stream = wordMasterService.boardStatus.asAsyncSequence()
+                let stream = wordMasterService.boardStatusOrdinals.asAsyncSequence()
                 for try await data in stream {
-                    self.boardStatus = data
+                    self.boardStatus = data.map { row in row.map { LetterStatus(rawValue: $0) ?? .UNGUESSED } }
                 }
             } catch {
                 print("Failed with error: \(error)")
@@ -39,9 +39,9 @@ class ViewModel: ObservableObject {
         }
         Task {
             do {
-                let stream = wordMasterService.keyStatus.asAsyncSequence()
+                let stream = wordMasterService.keyStatusOrdinals.asAsyncSequence()
                 for try await data in stream {
-                    self.keyStatus = data
+                    self.keyStatus = data.mapValues { LetterStatus(rawValue: $0) ?? .UNGUESSED }
                 }
             } catch {
                 print("Failed with error: \(error)")

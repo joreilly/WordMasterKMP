@@ -38,6 +38,11 @@ class WordMasterService(wordsFilePath: String) {
     // Transient message shown to the user when a guess is rejected (e.g. too short / not a word).
     val guessError: MutableStateFlow<String?> = MutableStateFlow(null)
 
+    // Swift Export can't bridge an enum inside a collection (KT-90088), so the iOS app observes these
+    // ordinal copies of boardStatus/keyStatus and maps them back with LetterStatus(rawValue:).
+    val boardStatusOrdinals: MutableStateFlow<List<List<Int>>> = MutableStateFlow(emptyList())
+    val keyStatusOrdinals: MutableStateFlow<Map<String, Int>> = MutableStateFlow(emptyMap())
+
 
     init {
         println("wordsFilePath = $wordsFilePath")
@@ -51,7 +56,7 @@ class WordMasterService(wordsFilePath: String) {
         println("answer! = $answer")
         revealedAnswer.value = null
         lastGuessCorrect.value = false
-        keyStatus.value = emptyMap()
+        setKeyStatus(emptyMap())
         guessError.value = null
 
         // set default values for guesses/letter status info
@@ -68,7 +73,7 @@ class WordMasterService(wordsFilePath: String) {
             newBoardStatus.add(statusList)
             newBoardGuesses.add(guesses)
         }
-        boardStatus.value = newBoardStatus
+        setBoardStatus(newBoardStatus)
         boardGuesses.value = newBoardGuesses
     }
 
@@ -143,7 +148,7 @@ class WordMasterService(wordsFilePath: String) {
 
             val currentStatusCopy = ArrayList(boardStatus.value)
             currentStatusCopy[currentGuessAttempt] = status
-            boardStatus.value = currentStatusCopy
+            setBoardStatus(currentStatusCopy)
 
             updateKeyStatus(currentGuess, status)
 
@@ -171,7 +176,17 @@ class WordMasterService(wordsFilePath: String) {
                 newKeyStatus[letter] = newStatus
             }
         }
-        keyStatus.value = newKeyStatus
+        setKeyStatus(newKeyStatus)
+    }
+
+    private fun setBoardStatus(status: List<List<LetterStatus>>) {
+        boardStatus.value = status
+        boardStatusOrdinals.value = status.map { row -> row.map { it.ordinal } }
+    }
+
+    private fun setKeyStatus(status: Map<String, LetterStatus>) {
+        keyStatus.value = status
+        keyStatusOrdinals.value = status.mapValues { it.value.ordinal }
     }
 
     private fun statusRank(status: LetterStatus?): Int = when (status) {
