@@ -1,0 +1,27 @@
+name: Submit a guess
+tags: [smoke]
+steps:
+  - say: The app title is shown
+    do: { assertVisible: { text: WordMaster KMP } }
+  - say: The game board is shown
+    do: { assertVisible: { id: Game.NewGame.Button } }
+  - say: Type the letter C
+    do: { tap: { id: Keyboard.Key.C } }
+  - say: Type the letter R
+    do: { tap: { id: Keyboard.Key.R } }
+  - say: Type the letter A
+    do: { tap: { id: Keyboard.Key.A } }
+  - say: Type the letter N
+    do: { tap: { id: Keyboard.Key.N } }
+  - say: Type the letter E
+    do: { tap: { id: Keyboard.Key.E } }
+  - say: The letters are placed on the board
+    do: { assertVisible: { id: Board.Tile.0.0, text: C } }
+  - say: Submit the guess
+    do: { tap: { id: Keyboard.Key.Enter } }
+  - say: Type the letter S for the next guess
+    do: { tap: { id: Keyboard.Key.S } }
+  - say: The accepted guess moved the game to the second row
+    do: { assertVisible: { id: Board.Tile.1.0, text: S } }
+  - say: Screenshot of the board after the guess
+    do: { takeScreenshot: WordMaster }

@@ -30,6 +30,7 @@ struct ContentView: View {
                                         RoundedRectangle(cornerRadius: 8)
                                             .stroke(Color.black.opacity(0.3), lineWidth: 1.5)
                                     )
+                                    .accessibilityIdentifier("Board.Tile.\(guessNumber).\(character)")
                             }
                         }
                         .modifier(ShakeEffect(animatableData: guessNumber == viewModel.getCurrentGuessAttempt() ? shakeTrigger : 0))
@@ -55,20 +56,20 @@ struct ContentView: View {
                     ForEach(0 ..< keyboardRows.count, id: \.self) { rowIndex in
                         HStack(spacing: 4) {
                             if rowIndex == keyboardRows.count - 1 {
-                                KeyButton(label: "ENTER", width: 56, background: Color(red: 0.83, green: 0.84, blue: 0.85), foreground: .black) {
+                                KeyButton(label: "ENTER", identifier: "Keyboard.Key.Enter", width: 56, background: Color(red: 0.83, green: 0.84, blue: 0.85), foreground: .black) {
                                     viewModel.submitGuess()
                                 }
                             }
                             ForEach(Array(keyboardRows[rowIndex]), id: \.self) { char in
                                 let letter = String(char)
-                                KeyButton(label: letter, width: 32,
+                                KeyButton(label: letter, identifier: "Keyboard.Key.\(letter)", width: 32,
                                           background: viewModel.keyBackgroundColor(letter),
                                           foreground: viewModel.keyTextColor(letter)) {
                                     viewModel.addLetter(letter)
                                 }
                             }
                             if rowIndex == keyboardRows.count - 1 {
-                                KeyButton(label: "DEL", width: 56, background: Color(red: 0.83, green: 0.84, blue: 0.85), foreground: .black) {
+                                KeyButton(label: "DEL", identifier: "Keyboard.Key.Delete", width: 56, background: Color(red: 0.83, green: 0.84, blue: 0.85), foreground: .black) {
                                     viewModel.removeLetter()
                                 }
                             }
@@ -81,6 +82,7 @@ struct ContentView: View {
                 }) {
                     Text("New Game")
                 }
+                .accessibilityIdentifier("Game.NewGame.Button")
                 .padding(.top, 8)
             }
             .padding(20)
@@ -115,6 +117,7 @@ struct ContentView: View {
 
 private struct KeyButton: View {
     let label: String
+    let identifier: String
     let width: CGFloat
     let background: Color
     let foreground: Color
@@ -131,6 +134,7 @@ private struct KeyButton: View {
                 )
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(identifier)
     }
 }
 

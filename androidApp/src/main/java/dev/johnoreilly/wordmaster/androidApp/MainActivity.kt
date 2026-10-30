@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -102,7 +103,8 @@ fun WordMasterView(padding: Modifier, snackbarHostState: SnackbarHostState) {
                 for (character in 0 until WordMasterService.NUMBER_LETTERS) {
                     LetterTile(
                         letter = boardGuesses[guessAttempt][character],
-                        status = boardStatus[guessAttempt][character]
+                        status = boardStatus[guessAttempt][character],
+                        testTag = "Board.Tile.$guessAttempt.$character"
                     )
                 }
             }
@@ -128,7 +130,10 @@ fun WordMasterView(padding: Modifier, snackbarHostState: SnackbarHostState) {
 
         Spacer(Modifier.height(12.dp))
 
-        Button(onClick = { wordMasterService.resetGame() }) {
+        Button(
+            onClick = { wordMasterService.resetGame() },
+            modifier = Modifier.testTag("Game.NewGame.Button")
+        ) {
             Text("New Game")
         }
 
@@ -148,7 +153,7 @@ fun WordMasterView(padding: Modifier, snackbarHostState: SnackbarHostState) {
 }
 
 @Composable
-private fun LetterTile(letter: String, status: LetterStatus) {
+private fun LetterTile(letter: String, status: LetterStatus, testTag: String) {
     Box(
         Modifier
             .padding(3.dp)
@@ -163,7 +168,8 @@ private fun LetterTile(letter: String, status: LetterStatus) {
             color = mapLetterStatusToTextColor(status),
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.testTag(testTag)
         )
     }
 }
@@ -181,18 +187,19 @@ private fun Keyboard(
         KEYBOARD_ROWS.forEachIndexed { index, row ->
             Row(horizontalArrangement = Arrangement.Center) {
                 if (index == KEYBOARD_ROWS.size - 1) {
-                    KeyButton("ENTER", onClick = onEnter, flexWidth = true)
+                    KeyButton("ENTER", testTag = "Keyboard.Key.Enter", onClick = onEnter, flexWidth = true)
                 }
                 row.forEach { char ->
                     val letter = char.toString()
                     KeyButton(
                         label = letter,
+                        testTag = "Keyboard.Key.$letter",
                         onClick = { onLetter(letter) },
                         status = keyStatus[letter] ?: LetterStatus.UNGUESSED
                     )
                 }
                 if (index == KEYBOARD_ROWS.size - 1) {
-                    KeyButton("DEL", onClick = onDelete, flexWidth = true)
+                    KeyButton("DEL", testTag = "Keyboard.Key.Delete", onClick = onDelete, flexWidth = true)
                 }
             }
         }
@@ -202,6 +209,7 @@ private fun Keyboard(
 @Composable
 private fun KeyButton(
     label: String,
+    testTag: String,
     onClick: () -> Unit,
     status: LetterStatus = LetterStatus.UNGUESSED,
     flexWidth: Boolean = false
@@ -220,7 +228,8 @@ private fun KeyButton(
             .then(if (flexWidth) Modifier.width(52.dp) else Modifier.width(32.dp))
             .clip(RoundedCornerShape(6.dp))
             .background(background)
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .testTag(testTag),
         contentAlignment = Alignment.Center
     ) {
         Text(
