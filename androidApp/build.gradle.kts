@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.gekko)
 }
 
 android {
@@ -32,6 +33,9 @@ android {
     }
 }
 
+gekko {
+    variants.set(listOf("debug"))
+}
 
 dependencies {
     implementation(project(":shared"))

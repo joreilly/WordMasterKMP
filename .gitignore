@@ -37,3 +37,6 @@ xcschememanagement.plist
 
 # Kotlin build/session cache
 .kotlin/
+
+# gekko UI test results
+/gekko-results/

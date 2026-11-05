@@ -1,0 +1,11 @@
+app:
+  android: dev.johnoreilly.wordmaster.androidApp
+  androidActivity: dev.johnoreilly.wordmaster.androidApp.MainActivity
+  ios: orgIdentifier.iosApp
+android:
+  runnerApk: installed
+  apk: ../androidApp/build/outputs/apk/debug/androidApp-debug.apk
+ios:
+  runnerDir: installed
+  agentFramework: installed
+  app: ../build/dd/Build/Products/Debug-iphonesimulator/iosApp.app
